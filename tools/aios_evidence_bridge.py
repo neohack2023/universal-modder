@@ -11,7 +11,7 @@ from pathlib import Path
 import re
 
 FIELDS = ("kind", "title", "game", "game_version", "platform", "engine", "route", "status", "date")
-LINK_RE = re.compile(r"https?://[^\\s)>'\"]+")
+LINK_RE = re.compile(r"https?://[^\s)>'\"]+")
 
 
 def frontmatter(text: str) -> dict[str, str]:
@@ -22,7 +22,7 @@ def frontmatter(text: str) -> dict[str, str]:
     for line in lines[1:]:
         if line.strip() == "---":
             break
-        match = re.match(r"^([a-z_]+):\\s*(.*)$", line)
+        match = re.match(r"^([a-z_]+):\s*(.*)$", line)
         if match:
             key, value = match.groups()
             if key in FIELDS:
