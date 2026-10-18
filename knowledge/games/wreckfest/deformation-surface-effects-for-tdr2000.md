@@ -1,0 +1,69 @@
+---
+kind: game
+title: "Wreckfest deformation and surface-effects research for a TDR 2000 Rust feature port"
+game: "Wreckfest"
+games_also: ["Carmageddon TDR 2000"]
+game_version: "Owned local Windows install; exact Wreckfest binary version not yet pinned"
+platform: windows
+engine: native
+route: reimplementation
+tools: ["Ghidra", "Rust 1.99.0", "Frida 17.22.1", "pefile", "universal-modder"]
+anti_cheat: "Offline research only; no online client or anti-cheat modifications"
+status: in-progress
+agents: ["ChatGPT (GPT-6)"]
+humans: []
+date: 2026-10-18
+links: ["https://github.com/neohack2023/universal-modder"]
+tags: [wreckfest, bugbear, soft-body, surface-effects, skidmarks, mesh-deformation, rust, reverse-engineering, tdr2000, evidence]
+---
+
+# Wreckfest deformation and surface-effects research for a TDR 2000 Rust feature port
+
+> Static Wreckfest research identified candidate soft-body, geometry-update and surface-effect subsystems. The current TDR 2000 prototype does not execute Wreckfest's original solver and its in-game Rust damage hook was not armed on the observed V02 run. This records reusable subsystem boundaries and verification gaps, not a working Wreckfest-to-TDR physics transfer.
+
+## Setup
+
+The research used an owned Windows Wreckfest installation within a local PC game reverse-engineering lab. Exact build hash and version were not captured in the available evidence and must be gathered before address-based work is repeated. The separate owned TDR 2000 PE32 clone was pinned by full SHA-256 `364e84c340358c5b8da545f6f084a13cfc86f8db7a49eb5455eca1fd9f24fd94`. Keep installed game assets and decompiler outputs outside the public knowledge repository.
+
+## Route and why
+
+The **reimplementation** route is exploratory: read the guest Wreckfest behaviors, construct narrow independent Rust features and make TDR the single owner of contact resolution, rigid bodies and car geometry. Do not claim that a plausible damage curve is the original Wreckfest soft-body algorithm. A simultaneous two-authoritative-engine setup was explicitly deferred because the same vehicle cannot safely accept independent collision impulses from both solvers.
+
+## How the game works (what we had to learn)
+
+Local reverse-engineering work has named separate Wreckfest research islands for soft-body deformation neighborhoods, contact backing arenas and record writers, car surface effects, particles, skidmarks and descriptor ownership. These are **candidate subsystem mappings from static work**, not completed behavioral specifications. A correct feature transfer needs to identify where collision impulses become localized deform forces, where physical vertices are updated, when render buffers synchronize, how bounding volumes are refreshed, and who owns material-specific dust/skid effects. Asset-oriented or documentation-level resemblance alone does not validate that flow.
+
+The local TDR side already has explicit vehicle damage and native mesh deformation stages, Eagle4 panel data, and a 25 Hz gameplay timing constraint. Preserving TDR's world scheduler and assigning its native geometry system sole update authority is a compatibility strategy, not evidence of Wreckfest engine recompilation.
+
+## Build steps
+
+1. Run `um kb search "Wreckfest"` and `um kb search "Carmageddon"`; scan the exact owned Wreckfest build and record a verifiable hash and version.
+2. Separate the static Wreckfest research objects: soft-body, collision/contact, renderer sync, bounds refresh and car-surface visual effects.
+3. Keep original binary observations and hypothetical Rust policies in different receipts and files; record address/version provenance for each candidate.
+4. Implement the smallest deterministic Rust deformation primitive, replay against a captured original-engine fixture when one is available, and compare contact inputs and mesh output.
+5. Integrate via a version-gated native hook in an isolated TDR clone. Do not change original installs or publish game data; report hook activation separately from gameplay behavior.
+6. Preserve a local `MODLOG.md`, export a sanitized field note and run `um kb check` and `um kb index` after changing this note.
+
+## Verification
+
+- **Static/source inspection:** Wreckfest decompiler research categorized candidate soft-body and surface effect regions. No validated original Wreckfest input/output replay was presented.
+- **Synthetic:** A Rust/TDR cross-game laboratory implemented proposed impulse, deformation and surface effects with passing unit checks. This was a synthetic model with no proof of Wreckfest parity.
+- **Real TDR run:** V02 Rust ASI loaded into the original TDR game and Hollowood Free Driving was recorded in its engine log, but the Frida hook installer reported `Error: invalid abi specified`. Thus the Wreckfest-inspired damage policy was **not applied** in that session.
+- **Not verified:** actual Wreckfest solver behavior transplanted to TDR, deformable collision surfaces, visual dent or skid effects generated by the new Rust module, or an in-game cross-engine physics merge.
+
+## Gotchas
+
+1. **Soft-body labels appear in a decompiler but no deformation happens in the host.** **Cause:** symbol/RTTI neighborhoods identify candidate subsystems, not a complete algorithm or update schedule. **Fix:** capture original-executable fixtures and follow vertex, render-buffer and bounds ownership before porting.
+2. **Rust returns plausible dents in synthetic tests.** **Cause:** parameters came from a new candidate rule, not a Wreckfest runtime oracle. **Fix:** label as candidate and require native input/output parity before claiming an engine feature transfer.
+3. **TDR runs with the Rust ASI but feels unchanged.** **Cause:** the host-native Frida hook install failed before it could modify damage arguments. **Fix:** require an armed hook witness and nonzero real native call counters; the ABI correction is not yet proven.
+4. **Two physics engines fight for the same car.** **Cause:** both attempt authoritative state updates. **Fix:** assign exactly one owner for contact, rigid-body integration, deformation, renderer sync and collision bounds; use the second engine as a source of reconstructed rules.
+
+## Assets
+
+No original game assets or binary outputs are redistributed. Each game's local install remains the source for authorized private extraction and tests.
+
+## Open questions
+
+- Pin Wreckfest executable version, build and engine-specific collision/deformation oracle cases.
+- Reconstruct localized vertex deformation, body-part fracture, collision mesh refresh and material reaction as separately tested modules.
+- Confirm the TDR hook ABI and calling convention before promoting any cross-game in-process integration claim.
