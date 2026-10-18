@@ -738,6 +738,51 @@
   ]
  },
  {
+  "path": "games/carmageddon-tdr-2000/rust-wreckfest-inspired-damage-bridge.md",
+  "kind": "game",
+  "title": "TDR 2000 with Rust damage hooks: a Wreckfest-inspired merge that loaded but did not arm",
+  "game": "Carmageddon TDR 2000",
+  "games_also": [
+   "Wreckfest"
+  ],
+  "game_version": "Local Windows PE32 TDR2000.exe SHA-256 364e84c340358c5b8da545f6f084a13cfc86f8db7a49eb5455eca1fd9f24fd94; Wreckfest exact executable version not pinned",
+  "platform": "windows",
+  "engine": "native",
+  "route": "native-hook",
+  "tools": [
+   "Rust 1.99.0 i686-pc-windows-msvc",
+   "Frida 17.22.1",
+   "Ultimate ASI Loader",
+   "pefile",
+   "Ghidra",
+   "universal-modder um win"
+  ],
+  "anti_cheat": "Offline single-player lab only; no online/anti-cheat intervention",
+  "status": "in-progress",
+  "agents": [
+   "ChatGPT (GPT-6)"
+  ],
+  "humans": [],
+  "date": "2026-10-18",
+  "links": [
+   "https://github.com/neohack2023/universal-modder"
+  ],
+  "tags": [
+   "tdr2000",
+   "carmageddon",
+   "wreckfest",
+   "rust",
+   "x86",
+   "native-hook",
+   "frida",
+   "asi",
+   "physics",
+   "deformation",
+   "observability",
+   "mashup"
+  ]
+ },
+ {
   "path": "games/cities-skylines/cities-skylines-modding-api-and-container-formats.md",
   "kind": "game",
   "title": "Cities: Skylines 1 and 2 modding: official APIs, editors, and the .crp/.locale containers",
@@ -5008,6 +5053,48 @@
    "crash",
    "reverse-engineering",
    "private-server"
+  ]
+ },
+ {
+  "path": "games/wreckfest/deformation-surface-effects-for-tdr2000.md",
+  "kind": "game",
+  "title": "Wreckfest deformation and surface-effects research for a TDR 2000 Rust feature port",
+  "game": "Wreckfest",
+  "games_also": [
+   "Carmageddon TDR 2000"
+  ],
+  "game_version": "Owned local Windows install; exact Wreckfest binary version not yet pinned",
+  "platform": "windows",
+  "engine": "native",
+  "route": "reimplementation",
+  "tools": [
+   "Ghidra",
+   "Rust 1.99.0",
+   "Frida 17.22.1",
+   "pefile",
+   "universal-modder"
+  ],
+  "anti_cheat": "Offline research only; no online client or anti-cheat modifications",
+  "status": "in-progress",
+  "agents": [
+   "ChatGPT (GPT-6)"
+  ],
+  "humans": [],
+  "date": "2026-10-18",
+  "links": [
+   "https://github.com/neohack2023/universal-modder"
+  ],
+  "tags": [
+   "wreckfest",
+   "bugbear",
+   "soft-body",
+   "surface-effects",
+   "skidmarks",
+   "mesh-deformation",
+   "rust",
+   "reverse-engineering",
+   "tdr2000",
+   "evidence"
   ]
  },
  {
