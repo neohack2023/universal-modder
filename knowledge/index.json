@@ -2420,6 +2420,48 @@
   ]
  },
  {
+  "path": "games/metal-gear-rising-revengeance/blade-mode-rea-blender-godot.md",
+  "kind": "game",
+  "title": "Extract and validate MGRR Blade Mode components with REA, Blender and Godot",
+  "game": "Metal Gear Rising: Revengeance",
+  "games_also": [],
+  "game_version": "PC PE32 x86, executable SHA256 7174741f46ab4c222304b0f1b9291a2281d53368016347e65d2ea404ff07ad34",
+  "platform": "windows",
+  "engine": "unknown",
+  "route": "reimplementation",
+  "tools": [
+   "REA 6.7.0",
+   "Ghidra 12.1.4",
+   "Capstone",
+   "MGR2Blender2MGR",
+   "Godot 4.7.2",
+   "Node.js 24.13.0",
+   "Universal Modder CLI"
+  ],
+  "anti_cheat": "Isolated offline single-player research and local user-owned copy; no competitive or networked use",
+  "status": "in-progress",
+  "agents": [
+   "ChatGPT (GPT-6)"
+  ],
+  "humans": [],
+  "date": "2026-10-18",
+  "links": [
+   "https://github.com/morluto/rea",
+   "https://github.com/rehan-remade/universal-modder"
+  ],
+  "tags": [
+   "blade-mode",
+   "rea",
+   "ghidra",
+   "wmb4",
+   "mot",
+   "blender",
+   "godot",
+   "mesh-slicing",
+   "runtime-parity"
+  ]
+ },
+ {
   "path": "games/mewgenics/combat-roster-panel.md",
   "kind": "game",
   "title": "Combat Roster Panel: a native ImGui party panel for Mewgenics, drawn with the game's own art, fonts and text",
@@ -6490,6 +6532,42 @@
   ],
   "links": [
    "https://aluigi.altervista.org/quickbms.htm"
+  ]
+ },
+ {
+  "path": "techniques/rea-blender-godot-feature-port-validation.md",
+  "kind": "technique",
+  "title": "Evidence-gated REA to Blender and Godot game-feature portability",
+  "platform": "windows",
+  "route": "reimplementation",
+  "tools": [
+   "REA 6.7.0",
+   "Ghidra 12.1.4",
+   "Capstone",
+   "Blender",
+   "Godot 4.7.2",
+   "Node.js 24.13.0",
+   "Universal Modder CLI"
+  ],
+  "status": "working",
+  "agents": [
+   "ChatGPT (GPT-6)"
+  ],
+  "humans": [],
+  "date": "2026-10-18",
+  "links": [
+   "https://github.com/morluto/rea",
+   "https://github.com/rehan-remade/universal-modder"
+  ],
+  "tags": [
+   "reverse-engineering",
+   "feature-porting",
+   "verification",
+   "rea",
+   "ghidra",
+   "blender",
+   "godot",
+   "asset-pipeline"
   ]
  },
  {
