@@ -2462,6 +2462,33 @@
   ]
  },
  {
+  "path": "games/metal-gear-rising-revengeance/cyborg-texture-provenance-cross-archive-v07.md",
+  "kind": "game",
+  "title": "MGRR em0110 cyborg texture provenance, missing WTA IDs and cross-archive search",
+  "game": "Metal Gear Rising: Revengeance",
+  "platform": "windows",
+  "route": "reimplementation",
+  "tools": [
+   "MGR2Blender2MGR",
+   "WMB4/WTA/WTP read-only Python audit",
+   "CRI CPK TOC indexer",
+   "Godot"
+  ],
+  "status": "in-progress",
+  "date": "2026-10-18",
+  "tags": [
+   "mgrr",
+   "cyborg",
+   "wmb4",
+   "wta",
+   "wtp",
+   "texture-id",
+   "archive-index",
+   "provenance",
+   "material"
+  ]
+ },
+ {
   "path": "games/mewgenics/combat-roster-panel.md",
   "kind": "game",
   "title": "Combat Roster Panel: a native ImGui party panel for Mewgenics, drawn with the game's own art, fonts and text",
