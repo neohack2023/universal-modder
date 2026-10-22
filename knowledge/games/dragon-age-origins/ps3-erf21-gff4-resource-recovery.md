@@ -75,3 +75,24 @@ Choose **data-first** reverse engineering before attempting any executable trans
 - A future native executable must demonstrate rendering, deterministic scene load, player input and real gameplay; none of these gates has passed.
 
 Local proof identifiers (HOST02-only): `DAO_ERF21_STATIC_DECODE_V01.json`, `DAO_ERF21_EXPORT_INDEPENDENT_VALIDATION_V01.json`, `DAO_114815_CUT_XML_VALIDATION_V01.json`, `DAO_CUT_STAGE_PC_COMPARISON_GATE_V01.json`.
+
+## Animation dependency recovery (2026-10-22 follow-up)
+
+- Parsed the real `114815.cut` XML references: **13 distinct `.ani` names** plus one stage reference, `owen_chest_found.stg` (already verified). Three animation resources were recovered from the PS3 disc's `PS3_GAME/USRDIR/packages/core/data/global.rim`; **ten remain unresolved**. Absence from scanned archive tables is **not** evidence of absence from the game.
+- `global.rim` is 10,344,374 bytes, holds 4,603 validated resource records and names 484 `.ani` resources. The other early candidate `moduleglobal.rim` contains two non-animation records.
+- Matched `global.rim` table records (entry numbers are **zero-based**; byte offsets are relative to the extracted archive):
+
+  | Animation | Entry | Offset | Stored bytes | Unpacked bytes |
+  | --- | ---: | ---: | ---: | ---: |
+  | `mh.po_pose_a.ani` | 1965 | 4448151 | 7298 | 10102 |
+  | `mh.wi_wallln_l_ex.ani` | 2175 | 6147463 | 20618 | 23492 |
+  | `mh.wi_wallln_l_lp.ani` | 2178 | 6168406 | 3448 | 5944 |
+
+- Each of the three named resources was selectively decompressed, separately hashed and decoded with verified xoreos-tools `gff2xml`. The resulting XML documents are valid GFF4 with `ANI` type, `V0.1` version and **`X360` platform tag**, despite their provenance from the PS3 ISO. This may reflect shared console resource layouts, but **no platform compatibility or runtime animation playback has been proven**.
+- Decoded XML node counts: `mh.po_pose_a.ani` **4,877**, `mh.wi_wallln_l_ex.ani` **13,132**, `mh.wi_wallln_l_lp.ani` **2,352**.
+- A separate bounded core-archive indexing pass examined **eight extracted archives**, producing **11,821 valid entries** and a machine-readable `resource name → archive path → entry index → byte offset → compressed/uncompressed sizes` index on Host 02. The additional candidates included `chargen.rim`, `chargen.gpu.rim`, `designercutscenes.erf`, `face.erf`, `fcs.rim`, and `globalvfx.rim`. No additional matches among the ten unresolved animation names were observed in those tables. The large `models.erf` candidate (~625 MB) was **not verified or indexed** due to intermittent remote-host timeouts.
+- The index is a **scoped partial catalog**, not the full disc's resource database. No archive payload was decompressed to build the name index itself; only the three confirmed animation entries were separately decoded. Keep the original ISO and all game-derived binaries/XML outside this public repository.
+
+**Local verification identifiers:** `DAO_CUT_DEPENDENCY_PROBE_V01.json`, `DAO_ANIMATION_ARCHIVE_NAME_PROBE_V01.json`, `DAO_MATCHED_ANIMATION_EXPORT_V01.json`, `DAO_ANIMATION_GFF_XML_V01.json`, `DAO_ARCHIVE_RESOURCE_NAME_INDEX_V01.json`; machine index `DAO_RESOURCE_NAME_TO_ARCHIVE_INDEX_V01.json`. These are Host 02 local artifacts, not published game data.
+
+**Next acceptance gate:** inspect further likely animation archives using directory tables only; add confirmed names to the same index; extract/hash/parse newly matched `.ani` resources, then inspect skeletal linkage and test playback in an isolated renderer. Native executable and gameplay remain **not demonstrated**.
