@@ -1226,6 +1226,45 @@
   ]
  },
  {
+  "path": "games/dragon-age-origins/ps3-erf21-gff4-resource-recovery.md",
+  "kind": "game",
+  "title": "PS3 Dragon Age Origins resource recovery: ERF V2.1 and GFF4 cutscene XML",
+  "game": "Dragon Age: Origins",
+  "games_also": [],
+  "game_version": "PS3 Ultimate Edition BLES01076, disc 01.00",
+  "platform": "windows",
+  "engine": "native",
+  "route": "data",
+  "tools": [
+   "7-Zip 26.03",
+   "Python 3.14",
+   "zlib",
+   "xoreos-tools 0.0.6 gff2xml"
+  ],
+  "anti_cheat": "Offline owned-disc static extraction only; no game launch or anti-cheat interaction",
+  "status": "in-progress",
+  "agents": [
+   "ChatGPT (GPT-6)"
+  ],
+  "humans": [],
+  "date": "2026-10-22",
+  "links": [
+   "https://github.com/xoreos/xoreos-tools"
+  ],
+  "tags": [
+   "ps3",
+   "dragon-age",
+   "erf",
+   "gff4",
+   "cutscene",
+   "resource-extraction",
+   "xoreos",
+   "porting",
+   "endian",
+   "validation"
+  ]
+ },
+ {
   "path": "games/dragon-s-dogma-2/blink-strike-teleports-behind-the-target-reframework-lua-ski.md",
   "kind": "game",
   "title": "Blink Strike teleports behind the target (REFramework Lua skill rework)",
@@ -2784,6 +2823,48 @@
    "reflexes",
    "utf8-journal",
    "gametest"
+  ]
+ },
+ {
+  "path": "games/minecraft/native-quake-rocket-faucet-sdk-compatibility-v01.md",
+  "kind": "game",
+  "title": "Minecraft native Faucet mod SDK compatibility migration: pinned Quake/Rust adapter",
+  "game": "Minecraft for Windows (4J/Faucet native candidate)",
+  "games_also": [
+   "Quake"
+  ],
+  "game_version": "Source-built Faucet MinecraftClient.exe SHA256 6c4a3a84c1eb194c9e39404d78bbfe718f1334a30d482d63b2708504538d2538",
+  "platform": "windows",
+  "engine": "native",
+  "route": "native-hook",
+  "tools": [
+   "MSVC Build Tools",
+   "Python",
+   "PE export/import verifier",
+   "Rust FFI",
+   "Universal Modder port-a-mod guidance"
+  ],
+  "anti_cheat": "Isolated, offline, user-owned native Minecraft playtest; no multiplayer or protected game process",
+  "status": "in-progress",
+  "agents": [
+   "ChatGPT (GPT-6)"
+  ],
+  "humans": [],
+  "date": "2026-10-21",
+  "links": [
+   "https://github.com/rehan-remade/universal-modder/blob/c1dff21663665dd17af289744a301b66e369605e/skills/port-a-mod/SKILL.md",
+   "https://github.com/ytsodacan/Faucet"
+  ],
+  "tags": [
+   "minecraft",
+   "faucet",
+   "mod-compatibility",
+   "port-a-mod",
+   "native-dll",
+   "rust",
+   "migration",
+   "static-verified",
+   "runtime-unverified"
   ]
  },
  {
