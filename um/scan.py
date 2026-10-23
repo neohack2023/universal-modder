@@ -16,6 +16,7 @@ import re
 import struct
 import subprocess
 import time
+import sys
 from pathlib import Path
 
 from um.common import die, is_mac, is_windows, is_wsl, ps_exe, to_posix
@@ -199,6 +200,7 @@ class Index:
         self.files: list[str] = []
         self.dirs: set[str] = set()
         self.truncated = False
+        self.paths: dict[str, Path] = {}
         base = len(str(root)) + 1
         for dirpath, dirnames, filenames in os.walk(root):
             rel = dirpath[base:].replace("\\", "/")
@@ -209,7 +211,9 @@ class Index:
             for d in dirnames:
                 self.dirs.add((rel + "/" + d if rel else d).lower())
             for f in filenames:
-                self.files.append((rel + "/" + f if rel else f).lower())
+                key = (rel + "/" + f if rel else f).lower()
+                self.files.append(key)
+                self.paths[key] = Path(dirpath) / f
             if len(self.files) > MAX_ENTRIES:
                 self.truncated = True
                 break
@@ -224,14 +228,8 @@ class Index:
         return any(fnmatch.fnmatch(d, p) for p in patterns for d in self.dirs)
 
     def path(self, rel_lower: str) -> Path:
-        """Case-insensitive rel path -> real path."""
-        cur = self.root
-        for part in rel_lower.split("/"):
-            try:
-                cur = next(c for c in cur.iterdir() if c.name.lower() == part)
-            except (StopIteration, OSError):
-                return self.root / rel_lower
-        return cur
+        """O(1) path resolution from the indexed OS walk, not repeated directory enumeration."""
+        return self.paths.get(rel_lower, self.root / rel_lower)
 
 
 # --------------------------------------------------------------------------- binary sniffing
@@ -369,7 +367,7 @@ MOD_DIRS = ["mods", "mod", "addons", "plugins", "custom", "workshop", "usermods"
 KNOWN = {
     "terraria": ("tModLoader (free Steam app 1281930): C# ModItem/ModNPC/ModProjectile/ModSystem, hot reload from ModSources", "dotnet-xna.md"),
     "stardew valley": ("SMAPI + Content Patcher (JSON content packs) or C# SMAPI mods with Harmony", "dotnet-xna.md"),
-    "celeste": ("Everest + Olympus; C# code mods with MonoMod hooks, maps with Lönn/Ahorn", "dotnet-xna.md"),
+    "celeste": ("Everest + Olympus; C# code mods with MonoMod hooks, maps with LÃ¶nn/Ahorn", "dotnet-xna.md"),
     "rimworld": ("XML Defs + C# with Harmony; drop mods in Mods/ (or Workshop)", "unity.md"),
     "age of empires ii: definitive edition": ("data mods (.dat via genieutils-py), UI/graphics mods, scenarios (AoE2ScenarioParser), SLD sprites", "genie-aoe2.md"),
     "the elder scrolls v: skyrim special edition": ("ESP/ESL plugins (xEdit, Creation Kit), Papyrus, SKSE + CommonLibSSE-NG native plugins, MO2", "bethesda.md"),
@@ -386,7 +384,7 @@ KNOWN = {
     "hollow knight": ("Hollow Knight Modding API (Lumafly installer), C# mods", "unity.md"),
     "slay the spire": ("ModTheSpire + BaseMod (Java, SpirePatch)", "misc-engines.md"),
     "slay the spire 2": ("the game's own mod loader: C# .dll + Godot .pck + .json manifest in mods/; BaseLib (NuGet Alchyr.Sts2.BaseLib) for cards, relics and characters", "godot.md"),
-    "balatro": ("Steamodded + lovely (Lua injection into the LÖVE game)", "misc-engines.md"),
+    "balatro": ("Steamodded + lovely (Lua injection into the LÃ–VE game)", "misc-engines.md"),
     "kenshi": ("FCS .mod data mods + asset overrides in mods/<name>/ mirroring data/ (load order in the launcher or KMM); code via RE_Kenshi + KenshiLib C++ plugins (VS2010 v100 x64, GPLv3, listed in the mod's RE_Kenshi.json) - the game exe is native, no CLR", "native.md"),
     "factorio": ("official Lua modding API (mods/ folder, data.lua + control.lua)", "misc-engines.md"),
     "mindustry": ("the built-in mod loader, no patching: mod.hjson/mod.json + content/<type>/*.hjson|json (blocks, units, items...), "
@@ -435,8 +433,8 @@ ONLINE_ONLY = ["valorant", "league of legends", "fortnite", "apex legends", "pub
 
 
 def _plain(name: str) -> str:
-    """'Tom Clancy's Rainbow Six® Siege' -> 'tom clancy s rainbow six siege'."""
-    return " ".join(re.sub(r"[^a-z0-9]+", " ", name.lower().replace("®", "").replace("™", "")).split())
+    """'Tom Clancy's Rainbow SixÂ® Siege' -> 'tom clancy s rainbow six siege'."""
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", name.lower().replace("Â®", "").replace("â„¢", "")).split())
 
 
 def online_only(name: str) -> str | None:
@@ -469,7 +467,7 @@ ENGINES = {
     "cryengine": ("CryEngine", "native.md", "pak (zip) overrides, Lua/XML where exposed; native hooks otherwise"),
     "frostbite": ("Frostbite", "native.md", "Frosty Tool Suite for supported titles, offline only; most titles have kernel anti-cheat"),
     "electron": ("Electron / NW.js / HTML5", "misc-engines.md", "extract resources/app.asar (or package.nw), patch JS, open devtools"),
-    "love2d": ("LÖVE (Lua)", "misc-engines.md", "the .love/exe is a zip of Lua; patch or inject with lovely"),
+    "love2d": ("LÃ–VE (Lua)", "misc-engines.md", "the .love/exe is a zip of Lua; patch or inject with lovely"),
     "zengin": ("ZenGin (Gothic 1/2)", "zengin.md", "Daedalus script mods first (MDK scripts -> .DAT in a .mod volume; Ikarus/LeGo, Ninja); Union plugin SDK (x86 C++ DLL in system/autorun, gothic-api headers) for engine code; GD3D11 renderer; assets in Data/*.vdf via ZenKit. Union/GD3D11 need G1 1.08k_mod or G2 NotR 2.6.0.0-rev2: check the exe build first (on Steam use the Workshop beta, don't swap the exe), see zengin.md"),
     "java": ("Java", "misc-engines.md", "decompile jars (Vineflower/CFR), patch with a mod loader or bytecode (Mixin/ASM)"),
     "defold": ("Defold", "misc-engines.md", "unpack game.arcd; Lua scripts"),
@@ -678,7 +676,7 @@ def detect(ix: Index) -> tuple[list[tuple[str, int, list[str], dict]], dict]:
     elif ix.has("index.html") and ix.has("*.js") and not hits:
         add("electron", 50, ["index.html + js"])
 
-    # LÖVE, Java, Defold, Cocos, Haxe
+    # LÃ–VE, Java, Defold, Cocos, Haxe
     if ix.has("love.dll", "*.love", "lovec.exe"):
         add("love2d", 95, ix.find("love.dll", "*.love")[:1])
     # shallow jars only: a bundled Ghidra/SDK in a dev subfolder isn't the game's engine
@@ -703,7 +701,7 @@ def save_hints(name: str, det: dict) -> list[str]:
     wf = win_folders()
     prof, docs = wf.get("profile"), wf.get("documents")
     appdata, local = wf.get("appdata"), wf.get("localappdata")
-    base = re.sub(r"[:®™]", "", name or "")
+    base = re.sub(r"[:Â®â„¢]", "", name or "")
     names = {n for n in (name, base, base.split(" - ")[0], re.sub(r"\s*(definitive edition|legacy|enhanced|remastered)$", "", base, flags=re.I),
                          det.get("product"), det.get("project")) if n}
     cands = [Path(t.format(**wf)) for t in KNOWN_SAVES.get((name or "").lower(), []) if all(k in wf for k in re.findall(r"{(\w+)}", t))]
@@ -733,11 +731,22 @@ def save_hints(name: str, det: dict) -> list[str]:
     return out
 
 
-def scan(query: str) -> dict:
+def scan(query: str, diagnostics: bool = False) -> dict:
+    start = time.monotonic()
+    stages = []
+    def stage(name: str):
+        elapsed = round(time.monotonic() - start, 3)
+        stages.append({"stage": name, "elapsed_seconds": elapsed})
+        if diagnostics:
+            print(f"[um scan] {name}: {elapsed:.3f}s", file=sys.stderr, flush=True)
+    stage("resolve:start")
     game = resolve_game(query)
+    stage("resolve:complete")
     root = Path(game["path"])
     ix = Index(root)
+    stage(f"index:complete files={len(ix.files)} truncated={ix.truncated}")
     hits, facts = detect(ix)
+    stage("detect:complete")
     key, score, ev, det = hits[0]
     label, playbook, route = ENGINES[key]
     anti = [n for n, pats in ANTI_CHEAT if ix.has(*pats) or ix.has_dir(*[p.rstrip("/*") for p in pats if p.endswith("/*")])]
@@ -774,6 +783,7 @@ def scan(query: str) -> dict:
         executables=facts.get("executables", {}), routes=routes, warnings=warnings,
         playbook=f"skills/mod-any-game/references/engines/{routes[0]['playbook']}",
         files_indexed=len(ix.files), index_truncated=ix.truncated,
+        scan_diagnostics=stages if diagnostics else [],
     )
     return report
 
@@ -809,7 +819,57 @@ def format_report(r: dict) -> str:
     return "\n".join(lines)
 
 
+def aios_games(root: Path) -> list[dict]:
+    """Shallow, read-only discovery: registered game workbench directory names only."""
+    games = root / "GAMES"
+    if not games.is_dir():
+        return []
+    found = []
+    for path in sorted(games.iterdir(), key=lambda p:p.name.lower()):
+        if path.is_dir() and not path.is_symlink() and not path.name.startswith("."):
+            found.append({"name":path.name,"path":str(path),"store":"aios-workbench",
+                          "appid":None,"status":"workbench-directory-not-install"})
+            if len(found)>=100:break
+    return found
+
+
 def main(args):
+    # Windows does not offer a reliable per-syscall Python cancellation primitive.
+    # Keep the existing engine detector in a child process so a stuck file read
+    # can be terminated without hanging the invoking shell.
+    if args.game and args.timeout_seconds > 0 and not os.getenv("UM_SCAN_BOUNDED_CHILD"):
+        command = [sys.executable, "-m", "um", "scan", args.game, "--json",
+                   "--diagnostics"]
+        env = os.environ.copy()
+        env["UM_SCAN_BOUNDED_CHILD"] = "1"
+        try:
+            done = subprocess.run(command, capture_output=True, text=True,
+                                  timeout=args.timeout_seconds, env=env)
+        except subprocess.TimeoutExpired as ex:
+            stages = (ex.stderr or b"").decode(errors="replace") if isinstance(ex.stderr, bytes) else (ex.stderr or "")
+            error = {"error":"scan_timeout","game":args.game,
+                     "budget_seconds":args.timeout_seconds,
+                     "last_stage":stages.strip().splitlines()[-1] if stages.strip() else "not_started",
+                     "remediation":"Scan a smaller game directory or inspect stage diagnostics"}
+            if args.diagnostics: print(stages, file=sys.stderr, end="")
+            print(json.dumps(error, indent=2) if args.json else
+                  "scan timed out: "+str(error), file=sys.stdout)
+            raise SystemExit(2)
+        if args.diagnostics: print(done.stderr, file=sys.stderr, end="")
+        if done.returncode:
+            print(done.stderr or done.stdout, file=sys.stderr)
+            raise SystemExit(done.returncode)
+        if args.json:
+            print(done.stdout, end="")
+        else:
+            print(format_report(json.loads(done.stdout)))
+        return
+    if args.aios_root and args.list:
+        entries = aios_games(Path(args.aios_root))
+        if args.json:print(json.dumps(entries,indent=2))
+        else:
+            for entry in entries:print(f"aios-workbench {entry['name']} -> {entry['path']} (not a verified install)")
+        return
     if args.list:
         games = all_games()
         if args.json:
@@ -822,7 +882,7 @@ def main(args):
         return
     if not args.game:
         die("give a game name or folder, or --list")
-    r = scan(args.game)
+    r = scan(args.game, diagnostics=args.diagnostics)
     print(json.dumps(r, indent=2) if args.json else format_report(r))
 
 
@@ -831,4 +891,7 @@ def register(sub):
     p.add_argument("game", nargs="?", help="name (fuzzy) or install folder")
     p.add_argument("--list", action="store_true", help="list installed games (Steam, Epic, Xbox)")
     p.add_argument("--json", action="store_true")
+    p.add_argument("--diagnostics", action="store_true", help="emit timed stage receipts to stderr")
+    p.add_argument("--aios-root", help="registered AIOS PC game lab root for bounded workbench listing")
+    p.add_argument("--timeout-seconds", type=float, default=20, help="whole-scan child-process deadline (default: 20s; 0 disables)")
     p.set_defaults(func=main)
