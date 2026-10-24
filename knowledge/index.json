@@ -1218,6 +1218,42 @@
   ]
  },
  {
+  "path": "games/carmageddon-tdr-2000/object-table-mesh-loader-evidence.md",
+  "kind": "game",
+  "title": "TDR 2000: conditional object-table insertion and Eagle4 mesh-load diagnosis",
+  "game": "Carmageddon TDR 2000",
+  "games_also": [],
+  "game_version": "Local Windows x86 TDR2000.exe, SHA-256-pinned executable",
+  "platform": "windows",
+  "engine": "unknown",
+  "route": "native-hook",
+  "tools": [
+   "Ghidra 12.1.4",
+   "Frida",
+   "Python",
+   "Visual Studio 2022 Build Tools (x86)",
+   "FFmpeg"
+  ],
+  "anti_cheat": "offline single player, no multiplayer hooks",
+  "status": "in-progress",
+  "agents": [
+   "ChatGPT (GPT-6)"
+  ],
+  "humans": [],
+  "date": "2026-10-24",
+  "links": [],
+  "tags": [
+   "carmageddon",
+   "tdr2000",
+   "reverse-engineering",
+   "mesh",
+   "mshs",
+   "x86",
+   "engine-extension",
+   "evidence"
+  ]
+ },
+ {
   "path": "games/caves-of-qud/external-game-master-bridge-save-identity-and-native-effects.md",
   "kind": "game",
   "title": "An external game master for Caves of Qud: a scripting-mod bridge, save identity and native effects",
