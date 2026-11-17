@@ -1,0 +1,32 @@
+{
+  "player": {
+    "position": [0, 0, 0],
+    "forward": [0, 0, 1]
+  },
+  "npcs": [
+    {
+      "id": "synthetic_merchant",
+      "position": [0.5, 0, 4],
+      "human": true,
+      "alive": true,
+      "named": true
+    },
+    {
+      "id": "synthetic_guard_behind",
+      "position": [0, 0, -9],
+      "human": true,
+      "alive": true,
+      "named": false
+    }
+  ],
+  "scene": {
+    "location": "test_square",
+    "time_of_day": "day",
+    "weather": "clear",
+    "quest": "synthetic_training"
+  },
+  "request": {
+    "reply": "Welcome to the test square.",
+    "action": "wave"
+  }
+}
