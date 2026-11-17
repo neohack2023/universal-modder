@@ -7,7 +7,7 @@ import sys
 
 from um import __doc__ as DOC, __version__
 
-GROUPS = ["scan", "fal", "comfy", "sprite", "render3d", "video", "win", "backup", "publish", "kb", "patch"]
+GROUPS = ["scan", "fal", "comfy", "sprite", "render3d", "video", "win", "backup", "publish", "kb", "patch", "npc"]
 
 
 def main(argv=None):

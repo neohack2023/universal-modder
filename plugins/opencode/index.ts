@@ -54,6 +54,7 @@ const GROUPS = [
   { name: "publish", blurb: "pre-release lint for a mod: no game files, no decompiled code, no leaked keys" },
   { name: "kb", blurb: "search, scaffold, check and index the field-note knowledge base (search / new / check / index)" },
   { name: "patch", blurb: "read-only Patch catalog: assets, licenses, credits, source repositories and Blender prices" },
+  { name: "npc", blurb: "offline NPC target, scene and safe action dryrun; no game, audio or LLM calls" },
 ]
 
 const GROUP_NAMES = new Set(GROUPS.map((group) => group.name))
